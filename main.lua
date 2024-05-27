@@ -13,6 +13,10 @@ function love.load()
 
   player.img = love.graphics.newImage('my-little-guy.png')
   player.speed = 200
+  player.ground = player.y
+  player.y_velocity = 0
+  player.jump_height = -300
+  player.gravity = -500
 end
 
 function love.update(dt)
@@ -28,6 +32,22 @@ function love.update(dt)
     player.x = player.x + (player.speed * dt)
   elseif love.keyboard.isDown('a') and not playerIsOnLeftEdge() then
     player.x = player.x - (player.speed * dt)
+  end
+
+  if love.keyboard.isDown('space') then
+    if player.y_velocity == 0 then
+      player.y_velocity = player.jump_height
+    end
+  end
+
+  if player.y_velocity ~= 0 then
+    player.y = player.y + player.y_velocity * dt
+    player.y_velocity = player.y_velocity - player.gravity * dt
+  end
+
+  if player.y > player.ground then
+    player.y_velocity = 0
+    player.y = player.ground
   end
 end
 
