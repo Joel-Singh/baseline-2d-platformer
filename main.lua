@@ -16,9 +16,17 @@ function love.load()
 end
 
 function love.update(dt)
-  if love.keyboard.isDown('d') then
+  local function playerIsOnLeftEdge()
+    return player.x < 0
+  end
+
+  local function playerIsOnRightEdge()
+    return player.x > (love.graphics.getWidth() - player.img:getWidth())
+  end
+
+  if love.keyboard.isDown('d') and not playerIsOnRightEdge() then
     player.x = player.x + (player.speed * dt)
-  elseif love.keyboard.isDown('a') then
+  elseif love.keyboard.isDown('a') and not playerIsOnLeftEdge() then
     player.x = player.x - (player.speed * dt)
   end
 end
